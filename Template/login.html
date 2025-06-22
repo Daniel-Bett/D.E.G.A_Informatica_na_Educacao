@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <link rel="stylesheet" href="../Style/login.css" />
+</head>
+<body>
+  <div class="login-container">
+    <form class="login-box" onsubmit="return handleLogin(event)">
+      <h2>Entrar</h2>
+
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+
+      <div class="input-group">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" name="senha" required />
+      </div>
+
+      <button type="submit">Entrar</button>
+
+      <p class="register-link">
+        Ainda não tem conta?
+        <a href="cadastro.html">Cadastre-se</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    async function handleLogin(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const senha = document.getElementById("senha").value;
+
+      try {
+        const response = await fetch("http://localhost:8002/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, senha })
+        });
+
+        if (!response.ok) {
+          // Se status não OK (ex: 401), pega mensagem do erro
+          const errorData = await response.json();
+          alert("Erro: " + ("Usuário ou senha inválidos"));
+          return false;
+        }
+
+        const data = await response.json();
+        window.location.href = "dashboard.html";
+
+      } catch (error) {
+        alert("Erro de conexão: " + error.message);
+      }
+
+      return false;
+    }
+  </script>
+</body>
+</html>

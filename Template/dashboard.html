@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard do Usuário</title>
+    <link rel="stylesheet" href="../Style/dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Bem-vindo ao Painel de Aprendizagem!</h1>
+
+        <div class="opcoes">
+            <button onclick="consultarRanking()">Consultar Ranking Geral</button>
+            <button onclick="mostrarFormulario()">Iniciar Quizz</button>
+            <button onclick="verConquistas()">Ver Conquistas</button>
+        </div>
+
+        <div id="formularioQuizz" class="formulario-quizz oculto">
+            <h2>Escolha o tema e o nível</h2>
+            <label for="materia">Matéria:</label>
+            <select id="materia" name="materia">
+                <option value="">-- Selecione --</option>
+                <option>Língua Portuguesa</option>
+                <option>Matemática</option>
+                <option>História</option>
+                <option>Geografia</option>
+                <option>Física</option>
+                <option>Química</option>
+                <option>Biologia</option>
+                <option>Educação Física</option>
+                <option>Artes</option>
+                <option>Inglês</option>
+                <option>Filosofia</option>
+                <option>Sociologia</option>
+            </select>
+
+            <label for="nivel">Nível Escolar:</label>
+            <select id="nivel" name="nivel">
+                <option value="">-- Selecione --</option>
+                <option>5º ano</option>
+                <option>6º ano</option>
+                <option>7º ano</option>
+                <option>8º ano</option>
+                <option>9º ano</option>
+                <option>1º ano do Ensino Médio</option>
+                <option>2º ano do Ensino Médio</option>
+                <option>3º ano do Ensino Médio</option>
+            </select>
+
+            <button onclick="iniciarQuizz()">Começar</button>
+        </div>
+    </div>
+
+    <script>
+        function mostrarFormulario() {
+            const form = document.getElementById("formularioQuizz");
+            form.classList.remove("oculto");
+        }
+
+        function iniciarQuizz() {
+            const materia = document.getElementById("materia").value;
+            const nivel = document.getElementById("nivel").value;
+
+            if (!materia || !nivel) {
+                alert("Por favor, selecione a matéria e o nível.");
+                return;
+            }
+
+            const url = `quiz.html?materia=${encodeURIComponent(materia)}&nivel=${encodeURIComponent(nivel)}`;
+            window.location.href = url;
+        }
+
+        function consultarRanking() {
+            alert("Funcionalidade de ranking em construção...");
+        }
+
+        function verConquistas() {
+            alert("Funcionalidade de conquistas em construção...");
+        }
+    </script>
+</body>
+</html>

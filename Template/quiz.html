@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Questão Interativa</title>
+  <link rel="stylesheet" href="../Style/quiz.css" />
+</head>
+<body>
+  <div class="container">
+    <p id="info"></p> <!-- mostra tema/nivel -->
+    <div id="pergunta" class="pergunta"></div>
+    <div id="alternativas" class="alternativas"></div>
+    <div id="justificativa" class="justificativa"></div>
+    <button id="btnGerar" onclick="gerar()">Gerar Questão</button>
+  </div>
+
+  <script>
+    function getParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tema = urlParams.get("materia") || "História";
+      const nivel = urlParams.get("nivel") || "5º ano";
+      return { tema, nivel };
+    }
+
+    function mostrarQuestao(data) {
+      const perguntaDiv = document.getElementById("pergunta");
+      const alternativasDiv = document.getElementById("alternativas");
+      const justificativaDiv = document.getElementById("justificativa");
+      const btnGerar = document.getElementById("btnGerar");
+
+      perguntaDiv.textContent = data.enunciado;
+      alternativasDiv.innerHTML = "";
+      justificativaDiv.style.display = "none";
+      justificativaDiv.textContent = "";
+      btnGerar.style.display = "none";
+      btnGerar.disabled = false;
+
+      data.alternativas.forEach((alt, i) => {
+        const btn = document.createElement("button");
+        btn.className = "alternativa";
+        btn.textContent = alt.texto;
+        btn.onclick = () => {
+          [...alternativasDiv.children].forEach(b => b.disabled = true);
+
+          data.alternativas.forEach((a, index) => {
+            if (a.correta) {
+              alternativasDiv.children[index].classList.add("correta");
+            } else if (index === i) {
+              alternativasDiv.children[index].classList.add("incorreta");
+            }
+          });
+
+          justificativaDiv.style.display = "block";
+          justificativaDiv.textContent = data.justificativa;
+          btnGerar.style.display = "inline-block";
+        };
+        alternativasDiv.appendChild(btn);
+      });
+    }
+
+    function gerar() {
+      const btnGerar = document.getElementById("btnGerar");
+      btnGerar.disabled = true;
+
+      const { tema, nivel } = getParams();
+
+      document.getElementById("info").textContent = `Tema: ${tema} | Nível: ${nivel}`;
+
+      fetch('http://127.0.0.1:8000/gerar_questao', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ tema, nivel })
+      })
+      .then(res => res.json())
+      .then(data => {
+        mostrarQuestao(data);
+      })
+      .catch(err => {
+        console.error("Erro ao buscar a questão:", err);
+      });
+    }
+
+    window.onload = gerar;
+  </script>
+</body>
+</html>
