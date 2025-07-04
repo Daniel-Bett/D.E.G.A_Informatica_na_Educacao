@@ -20,8 +20,8 @@ class LoginRequest(BaseModel):
 def get_conn():
     return psycopg2.connect(
         dbname="projeto_infoeducacao",
-        user="postgres",
-        password="daniel",
+        user="user_infoed",
+        password="12345",
         host="localhost",
         port=5432
     )

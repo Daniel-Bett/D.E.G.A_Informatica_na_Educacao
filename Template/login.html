@@ -54,6 +54,7 @@
         }
 
         const data = await response.json();
+        localStorage.setItem("cduser", data.cduser);
         window.location.href = "dashboard.html";
 
       } catch (error) {
