@@ -34,21 +34,30 @@ button {
 button:hover {
   background: #0056b3;
 }
-.form-quizz {
-  margin-top: 20px;
-  text-align: left;
-}
-.form-quizz label {
-  display: block;
-  margin-top: 15px;
-  font-weight: bold;
-}
 .form-quizz select {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
+  padding: 12px;
+  font-size: 15px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  margin-top: 5px;
+  background-color: #fff;
+  color: #333;
+  margin-top: 8px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-quizz select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+.form-quizz label {
+  font-weight: bold;
+  color: #333;
+  margin-top: 15px;
+  display: block;
 }
 .oculto {
     display: none;

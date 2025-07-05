@@ -5,12 +5,11 @@ import psycopg2
 
 app = FastAPI()
 
-# Configuração CORS para liberar qualquer origem (use com cuidado em produção)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # libera todos os domínios
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # libera todos os métodos HTTP (GET, POST, OPTIONS, etc)
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -22,8 +21,8 @@ class Usuario(BaseModel):
 def get_conn():
     return psycopg2.connect(
         dbname="projeto_infoeducacao",
-        user="postgres",
-        password="daniel",
+        user="user_infoed",
+        password="12345",
         host="localhost",
         port=5432
     )

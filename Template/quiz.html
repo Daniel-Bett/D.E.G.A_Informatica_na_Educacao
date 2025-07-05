@@ -8,19 +8,74 @@
 </head>
 <body>
   <div class="container">
-    <p id="info"></p> <!-- mostra tema/nivel -->
+    <p id="info"></p>
+    <div class="status-bar">
+      <div id="pontuacao" class="pontuacao">Pontuação: 0</div>
+      <div id="vidas" class="vidas"></div>
+    </div>
     <div id="pergunta" class="pergunta"></div>
     <div id="alternativas" class="alternativas"></div>
     <div id="justificativa" class="justificativa"></div>
-    <button id="btnGerar" onclick="gerar()">Gerar Questão</button>
+    <button id="btnGerar" onclick="gerar()">Continuar</button>
   </div>
 
   <script>
+    let vidas = 5;
+    let pontuacao = 0;
+    let questoesRespondidas = 0;
+
     function getParams() {
       const urlParams = new URLSearchParams(window.location.search);
       const tema = urlParams.get("materia") || "História";
       const nivel = urlParams.get("nivel") || "5º ano";
       return { tema, nivel };
+    }
+
+    function atualizarStatus() {
+      const pontuacaoEl = document.getElementById("pontuacao");
+      const vidasEl = document.getElementById("vidas");
+
+      pontuacaoEl.textContent = `Pontuação: ${pontuacao}`;
+
+      vidasEl.innerHTML = "❤️".repeat(vidas);
+    }
+
+    function salvarPontuacao() {
+      const cduser = localStorage.getItem("cduser");
+      const { tema, nivel } = getParams();
+
+      if (!cduser) {
+        alert("Usuário não logado. cduser não encontrado.");
+        return;
+      }
+
+      fetch("http://127.0.0.1:8003/ranqueamento", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          cduser: parseInt(cduser),
+          pontos: pontuacao,
+          materia: tema,
+          serie: nivel
+        })
+      })
+        .then((res) => {
+          if (!res.ok) throw new Error("Erro ao salvar pontuação");
+          return res.json();
+        })
+        .then((data) => alert(`Pontuação salva: ${JSON.stringify(data)}`))
+        .catch((err) => alert(`Erro ao salvar pontuação: ${err.message}`));
+    }
+
+    function mostrarFimDeJogo() {
+      salvarPontuacao();
+
+      const container = document.querySelector(".container");
+      container.innerHTML = `
+        <h2>Fim do Quiz</h2>
+        <p>Pontuação final: ${pontuacao}</p>
+        <button id="btnVoltarInicio" onclick="window.location.href='dashboard.html'">Voltar</button>
+      `;
     }
 
     function mostrarQuestao(data) {
@@ -43,17 +98,32 @@
         btn.onclick = () => {
           [...alternativasDiv.children].forEach(b => b.disabled = true);
 
+          let acertou = false;
           data.alternativas.forEach((a, index) => {
             if (a.correta) {
               alternativasDiv.children[index].classList.add("correta");
+              if (index === i) {
+                acertou = true;
+                pontuacao += 100;
+              }
             } else if (index === i) {
               alternativasDiv.children[index].classList.add("incorreta");
             }
           });
 
+          if (!acertou) {
+            vidas--;
+          }
+
+          atualizarStatus();
           justificativaDiv.style.display = "block";
           justificativaDiv.textContent = data.justificativa;
-          btnGerar.style.display = "inline-block";
+
+          if (vidas > 0) {
+            btnGerar.style.display = "inline-block";
+          } else {
+            setTimeout(mostrarFimDeJogo, 1000);
+          }
         };
         alternativasDiv.appendChild(btn);
       });
@@ -64,7 +134,6 @@
       btnGerar.disabled = true;
 
       const { tema, nivel } = getParams();
-
       document.getElementById("info").textContent = `Tema: ${tema} | Nível: ${nivel}`;
 
       fetch('http://127.0.0.1:8000/gerar_questao', {
@@ -81,7 +150,13 @@
       });
     }
 
-    window.onload = gerar;
+    window.onload = () => {
+      const status = document.createElement("p");
+      status.id = "status";
+      document.querySelector(".container").insertBefore(status, document.getElementById("pergunta"));
+      atualizarStatus();
+      gerar();
+    };
   </script>
 </body>
 </html>

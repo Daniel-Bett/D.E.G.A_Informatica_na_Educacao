@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Ranking por Matéria</title>
+  <link rel="stylesheet" href="../Style/ranking.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Ranking de Alunos por Matéria</h1>
+
+    <div class="form-ranking">
+      <label for="materiaSelect">Selecione a matéria:</label>
+      <select id="materiaSelect">
+        <option value="">-- Escolha uma matéria --</option>
+        <option>Língua Portuguesa</option>
+        <option>Matemática</option>
+        <option>História</option>
+        <option>Geografia</option>
+        <option>Física</option>
+        <option>Química</option>
+        <option>Biologia</option>
+        <option>Educação Física</option>
+        <option>Artes</option>
+        <option>Inglês</option>
+        <option>Filosofia</option>
+        <option>Sociologia</option>
+      </select>
+    </div>
+
+    <button onclick="carregarRanking()">Ver Ranking</button>
+
+    <div id="rankingContainer" class="oculto">
+      <h2>Resultado do Ranking</h2>
+      <table id="rankingTable">
+        <thead>
+          <tr>
+            <th>Posição</th>
+            <th>Usuário</th>
+            <th>Série</th>
+            <th>Pontuação</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <button onclick="window.location.href='dashboard.html'">Voltar ao Painel</button>
+  </div>
+
+  <script>
+    async function carregarRanking() {
+      const materia = document.getElementById("materiaSelect").value;
+      if (!materia) {
+        alert("Selecione uma matéria para consultar o ranking.");
+        return;
+      }
+
+      const container = document.getElementById("rankingContainer");
+      const tbody = document.querySelector("#rankingTable tbody");
+      tbody.innerHTML = "";
+      container.classList.add("oculto");
+
+      try {
+        const response = await fetch(`http://localhost:8003/ranqueamento/${encodeURIComponent(materia)}`);
+        if (!response.ok) throw new Error("Erro ao buscar ranking.");
+
+        const dados = await response.json();
+
+        if (dados.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4">Nenhum dado disponível para essa matéria.</td></tr>`;
+        } else {
+          dados.forEach((item, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${index + 1}</td>
+              <td>Usuário ${item.cduser}</td>
+              <td>${item.serie}</td>
+              <td>${item.pontos}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        }
+
+        container.classList.remove("oculto");
+
+      } catch (err) {
+        alert("Erro ao carregar ranking: " + err.message);
+      }
+    }
+  </script>
+</body>
+</html>
