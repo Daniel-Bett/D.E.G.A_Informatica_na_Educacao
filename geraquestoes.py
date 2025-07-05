@@ -6,7 +6,7 @@ import google.generativeai as genai
 import json
 
 # Configurar a API do Gemini
-genai.configure(api_key="SUA_KEY") 
+genai.configure(api_key="SUA_KEY_DO_GEMINI") 
 model = genai.GenerativeModel("gemini-2.0-flash-exp")
 
 app = FastAPI()

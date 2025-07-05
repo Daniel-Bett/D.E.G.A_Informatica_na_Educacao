@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Conquistas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .caixinha {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 600px;
+      width: 90%;
+    }
+
+    .slider-container {
+      position: relative;
+      width: 350px;
+      height: auto;
+      margin: 0 auto;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .slider {
+      display: flex;
+      width: 100%;
+      transition: transform 0.6s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+    }
+
+    .frase {
+      font-style: italic;
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #333;
+      min-height: 60px;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .conquistas {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .conquistas ul {
+      padding-left: 20px;
+      text-align: left;
+      margin-top: 8px;
+    }
+
+    .btn-voltar {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-voltar:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="caixinha">
+    <h2>Conquistas</h2>
+    <div class="slider-container">
+      <div class="slider" id="slider">
+        <div class="slide">
+          <div class="frase">"O importante é não parar de questionar. A curiosidade tem sua própria razão de existir." — Albert Einstein</div>
+          <img src="images/WhatsApp Image 2025-07-05 at 12.10.19.jpeg" alt="Imagem 1" />
+          <div class="conquistas">
+              <li>Alcançar 300 pontos na matéria de História</li>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="frase">"Nada na vida deve ser temido, apenas compreendido." — Marie Curie</div>
+          <img src="images/WhatsApp Image 2025-07-05 at 12.10.18.jpeg" alt="Imagem 2" />
+          <div class="conquistas">
+              <li>Alcançar 300 pontos na matéria de Química</li>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="frase">"O que sabemos é uma gota, o que ignoramos é um oceano." — Isaac Newton</div>
+          <img src="images/WhatsApp Image 2025-07-05 at 12.10.18 (1).jpeg" alt="Imagem 3" />
+          <div class="conquistas">
+              <li>Alcançar 300 pontos na matéria de Matemática</li>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="frase">"Aprender nunca esgota a mente." — Leonardo da Vinci</div>
+          <img src="https://i.imgur.com/7cXu4QN.jpg" alt="Imagem 4" />
+          <div class="conquistas">
+              <li>Alcançar 300 pontos na matéria de Física</li>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a href="dashboard.html" class="btn-voltar">Voltar ao Painel</a>
+  </div>
+
+  <script>
+    const slider = document.getElementById('slider');
+    const totalSlides = slider.children.length;
+    let index = 0;
+
+    setInterval(() => {
+      index = (index + 1) % totalSlides;
+      slider.style.transform = `translateX(-${index * 100}%)`;
+    }, 5000);
+  </script>
+</body>
+</html>
