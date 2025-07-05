@@ -1,4 +1,4 @@
-# infoeducacao D.E.G.A - Desafio Educacional Gamificado de Aprendizagem
+# D.E.G.A - Desafio Educacional Gamificado de Aprendizagem
 
 ## 🔍 Visão Geral
 
