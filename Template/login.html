@@ -47,7 +47,6 @@
         });
 
         if (!response.ok) {
-          // Se status não OK (ex: 401), pega mensagem do erro
           const errorData = await response.json();
           alert("Erro: " + ("Usuário ou senha inválidos"));
           return false;

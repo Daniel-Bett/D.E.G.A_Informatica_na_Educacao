@@ -25,6 +25,7 @@ class RanqueamentoRequest(BaseModel):
 class RanqueamentoResponse(BaseModel):
     id: int
     cduser: int
+    nome: str
     pontos: int
     materia: str
     serie: str
@@ -62,8 +63,10 @@ def listar_ranqueamento(materia: str):
     cur = conn.cursor()
     try:
         cur.execute("""
-            SELECT id, cduser, pontos, materia, serie
-            FROM ranqueamento
+            SELECT id,r.cduser, u.nome, pontos, materia, serie
+            FROM ranqueamento r
+			inner join usuarios u
+			on u.cduser = r.cduser
             WHERE materia = %s
             ORDER BY pontos DESC
         """, (materia,))
@@ -72,9 +75,10 @@ def listar_ranqueamento(materia: str):
             RanqueamentoResponse(
                 id=r[0],
                 cduser=r[1],
-                pontos=r[2],
-                materia=r[3],
-                serie=r[4]
+                nome=r[2],
+                pontos=r[3],
+                materia=r[4],
+                serie=r[5]
             ) for r in resultados
         ]
     except Exception as e:
